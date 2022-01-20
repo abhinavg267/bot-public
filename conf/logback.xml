@@ -1,0 +1,78 @@
+<!-- https://www.playframework.com/documentation/latest/SettingsLogger -->
+<configuration>
+
+  <conversionRule conversionWord="coloredLevel" converterClass="play.api.libs.logback.ColoredLevel" />
+
+  <!-- use pattern `%logger{36}` to print loggers' name  -->
+  <appender name="INFO_FILE" class="ch.qos.logback.core.FileAppender">
+    <file>/home/abhi/logs/trading-bot/application.log</file>
+    <encoder>
+      <pattern>
+        %d{yyyy-MM-dd HH:mm:ss.SSS} %highlight(%-5level) %logger{36} %magenta(%X{akkaSource}) %msg%n
+      </pattern>
+    </encoder>
+  </appender>
+
+  <appender name="STRATEGY_INFO_FILE" class="ch.qos.logback.core.FileAppender">
+    <file>/home/abhi/logs/trading-bot/strategy.log</file>
+    <encoder>
+      <pattern>
+        %d{yyyy-MM-dd HH:mm:ss.SSS} %highlight(%-5level) %logger{36} %magenta(%X{akkaSource}) %msg%n
+      </pattern>
+    </encoder>
+  </appender>
+
+  <appender name="BROKER_INFO_FILE" class="ch.qos.logback.core.FileAppender">
+    <file>/home/abhi/logs/trading-bot/broker.log</file>
+    <encoder>
+      <pattern>
+        %d{yyyy-MM-dd HH:mm:ss.SSS} %highlight(%-5level) %logger{36} %magenta(%X{akkaSource}) %msg%n
+      </pattern>
+    </encoder>
+  </appender>
+
+  <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+    <encoder>
+      <pattern>
+        %d{yyyy-MM-dd HH:mm:ss.SSS} %highlight(%-5level) %logger{36} %magenta(%X{akkaSource}) %msg%n
+      </pattern>
+    </encoder>
+  </appender>
+
+  <appender name="ASYNC_INFO_FILE" class="ch.qos.logback.classic.AsyncAppender">
+    <appender-ref ref="INFO_FILE" />
+  </appender>
+
+  <appender name="ASYNC_STRATEGY_INFO_FILE" class="ch.qos.logback.classic.AsyncAppender">
+    <appender-ref ref="STRATEGY_INFO_FILE" />
+  </appender>
+
+  <appender name="ASYNC_BROKER_INFO_FILE" class="ch.qos.logback.classic.AsyncAppender">
+    <appender-ref ref="BROKER_INFO_FILE" />
+  </appender>
+
+  <appender name="ASYNC_STDOUT" class="ch.qos.logback.classic.AsyncAppender">
+    <appender-ref ref="STDOUT" />
+  </appender>
+
+  <logger name="play" level="INFO" />
+
+  <logger name="application" level="DEBUG" />
+
+  <logger name="default" level="DEBUG"/>
+
+  <logger name="strategy" level="DEBUG" additivity="false">
+    <appender-ref ref="ASYNC_STRATEGY_INFO_FILE" />
+    <appender-ref ref="ASYNC_STDOUT" />
+  </logger>
+
+  <logger name="broker" level="DEBUG">
+    <appender-ref ref="ASYNC_BROKER_INFO_FILE" />
+  </logger>
+
+  <root level="INFO">
+    <appender-ref ref="ASYNC_INFO_FILE" />
+    <appender-ref ref="ASYNC_STDOUT" />
+  </root>
+
+</configuration>
